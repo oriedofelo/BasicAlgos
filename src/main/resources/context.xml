@@ -1,0 +1,108 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+	http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+	<context:annotation-config />
+	<context:component-scan base-package="ke.co.transunion" />
+	<bean
+		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+	<bean id="applicationProperties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:application.properties</value>
+		</property>
+	</bean>
+	<bean id="infinityCodeProperties"
+		class="ke.co.transunion.data.upload.config.InfinityCodeProperties"></bean>
+
+	<bean id="kenyaDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		abstract="false">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+		<property name="username" value="${kenya.datasource.username}"></property>
+		<property name="password" value="${kenya.datasource.password}"></property>
+		<property name="url" value="${kenya.datasource.url}"></property>
+	</bean>
+
+	<bean id="zambiaDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		abstract="false">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+		<property name="username" value="${zambia.datasource.username}"></property>
+		<property name="password" value="${zambia.datasource.password}"></property>
+		<property name="url" value="${zambia.datasource.url}"></property>
+	</bean>
+
+	<bean id="malawiDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		abstract="false">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+		<property name="username" value="${malawi.datasource.username}"></property>
+		<property name="password" value="${malawi.datasource.password}"></property>
+		<property name="url" value="${malawi.datasource.url}"></property>
+	</bean>
+
+	<bean id="rwandaDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		abstract="false">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+		<property name="username" value="${spring.datasource.username}"></property>
+		<property name="password" value="${spring.datasource.password}"></property>
+		<property name="url" value="${spring.datasource.url}"></property>
+	</bean>
+	<bean id="dataSource" class="ke.co.transunion.data.datasource.RoutingDataSource"
+		primary="true">
+		<property name="targetDataSources">
+			<map key-type="ke.co.transunion.data.datasource.Country">
+				<entry key="KENYA" value-ref="kenyaDataSource"></entry>
+				<entry key="ZAMBIA" value-ref="zambiaDataSource"></entry>
+				<entry key="MALAWI" value-ref="malawiDataSource"></entry>
+				<entry key="RWANDA" value-ref="rwandaDataSource"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="rwandaDataSource"></property>
+	</bean>
+	<bean id="accountTypeDao" scope="prototype"
+		class="ke.co.transunion.data.upload.dao.mobile.impl.AccountTypeDaoImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<bean id="utilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.mobile.KEUtilities">
+	</bean>
+	<bean id="rwMobileUtilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.mobile.RWUtilities">
+	</bean>
+	<bean id="zmUtilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.banks.ZMUtilities">
+	</bean>
+	<bean id="zmMobileUtilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.mobile.ZMMobileUtilities"></bean>
+
+	<bean id="zmUPIValidationUtilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.banks.ZMPIValidationUtilities">
+	</bean>
+	<bean id="zmUBCValidationUtilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.banks.ZMBounceChequeValidationUtilities">
+	</bean>
+	<bean id="zmPAValidationUtilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.banks.ZMPAValidationUtilities">
+	</bean>
+	<bean id="zmGIValidationUtilities" scope="prototype"
+		class="ke.co.transunion.data.upload.utilities.banks.ZMGIValidationUtilities">
+	</bean>
+	<bean id="mobileRecordValidationService" scope="prototype"
+		class="ke.co.transunion.data.service.impl.KERecordValidationServiceImpl"></bean>
+
+	<bean id="mobileRecordValidationServiceRW" scope="prototype"
+		class="ke.co.transunion.data.service.impl.RWRecordValidationServiceImpl"></bean>
+
+	<bean id="zmBanksRecordValidationService" scope="prototype"
+		class="ke.co.transunion.data.service.impl.ZMRecordValidationServiceImpl"></bean>
+
+</beans>
