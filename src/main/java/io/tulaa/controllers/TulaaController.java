@@ -47,7 +47,7 @@ public class TulaaController {
 	}
 
 	@RequestMapping(value = "/counttripletssmallersum", method = RequestMethod.POST)
-	@ApiOperation("Given an array of distinct integers and a sum value. Find count of triplets with sum smaller than given sum value. Exptected Time Complexity is O(n\u00B2)")
+	@ApiOperation("Given an array of distinct integers and a sum value. Find count of triplets with sum smaller than given sum value. Expected Time Complexity is O(n\u00B2)")
 	public HttpEntity<InterviewResponse> countTripletsWithSmallerSum(
 			@Valid @RequestBody InterviewRequest interviewRequest, HttpServletRequest request) {
 		InterviewResponse response = new InterviewResponse();
