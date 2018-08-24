@@ -6,6 +6,13 @@ import java.util.List;
 
 public class Utilities {
 
+	public static void main(String[] args) {
+		Utilities utilities = new Utilities();
+		int[] arr = { -1, -2, -3, 4, 5, 3 };
+		boolean answer = utilities.isArrayTriplet(arr, arr.length);
+		System.err.println(answer);
+	}
+
 	public static List<Integer> getRow(int rowIndex) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 
@@ -28,7 +35,9 @@ public class Utilities {
 			for (int j = i + 1; j < n; j++) {
 				for (int k = j + 1; k < n; k++) {
 					// Calculate square of array elements
-					int x = ar[i] * ar[i], y = ar[j] * ar[j], z = ar[k] * ar[k];
+					int x = ar[i] * ar[i];
+					int y = ar[j] * ar[j];
+					int z = ar[k] * ar[k];
 
 					if (x == y + z || y == x + z || z == x + y)
 						return true;
