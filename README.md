@@ -1,2 +1,2 @@
-# TulaaInterview
-Tulaa Solution
+# BasicAlgos
+BasicAlgos
